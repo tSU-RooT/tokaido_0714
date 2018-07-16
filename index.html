@@ -23,9 +23,264 @@
 	</head>
 	<body>
 		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+		  <div class="slides">
+<!-- Slide Text are below! -->
+<!-- P1 -->
+<section id="NextCloudを自宅NUCに建てた話(進行中)">
+  <section>
+    <h3>NextCloudを</h3>
+    <h3>自宅のNUCに建てた話(進行中)</h3>
+    <p>@tSU_RooT@mstdn.maud.io</p>
+  </section>
+</section>
+<!-- P2 -->
+<section id="NextCloudって何">
+  <section>
+    <h1>NextCloudって何</h1>
+    <p>Dropbox + カレンダーとかがくっついたサービスが
+   自鯖に建てられるやつ</p>
+    <p>ライセンス: AGPL(Mastodonといっしょ)</p>
+  </section>
+  <section>
+    <p>ownCloudがエンタープライズに寄りすぎていたので創業者によってフォークされた</p>  
+  </section>
+  <section>
+    <p>ownCloudのとき、Debianとひと悶着あった</p>
+    <p>メンテナと テストパッケージのアップデート時の挙動でもめるとか</p>  
+  </section>
+</section>
+<!-- P3 -->
+<section id="モチベーション">
+  <section>
+    <h1>モチベーション</h1>
+       <p>Google Driveは怖い</p>
+       <p>http://blog.tappli.com/article/69534410.html</p>
+       <ul>
+	 <li>突然の垢停止 → 関係ないサービスまで丸ごと止まる</li>
+	 <li>Dropboxもハッシュ値で検閲しているという話がある</li>
+       </ul>
+  </section>
+  <section>
+       <h2>ファイル暗号化で対抗？</h2>
+       <p>思いつく方法</p>
+       <p>ファイルをいちいちGPGで暗号化</p>
+  </section>
+  <section>
+       <p>GPGでやるのはどうみても運用がつらそう</p>
+       <p>eCryptfsでファイルシステムをラップすれば</p>
+       <p>行けそうだが……、そこまでするか？感がある</p>
+  </section>
+  <section>
+    <h3>自鯖に立てるメリット</h3>
+    <p>結構な頻度でOSをまるごと再インストール</p>
+    <p>(リストア含む)したりするので、</p>
+    <p>どこかにメディアファイルの保存場所を分離したい</p>
+  </section>
+  <section>
+    <p>他PC(スマホ・タブレット・非Unix系OS含む)とも簡単に共有したい</p>
+  </section>
+  <section>
+    <p>物理距離が近いと大容量もすぐ転送できる</p>
+  </section>
+  <section>
+    <h3>データ消失を免れる良い方法</h3>
+    <p>いろいろな場所にコピーし続ける</p>
+  </section>
+  <section>
+    <ul>
+      <li>プライベートなデータをコントロール下に置ける</li>
+      <li>普通のオンラインストレージに音楽ファイルなどを置くと、
+	私的利用の範疇を外れる可能性がある(判例より)</li>
+      <li>提供者:俺 利用者:俺 なら完全にGDPR-compliance</li>
+    </ul>
+  </section>
+  <section>
+    <h2>単純に鯖運用してみたい</h2>
+  </section>
+</section>
+<!-- P4 -->
+
+<section id="立ててみた">
+  <section>
+    <h2>立ててみた</h2>
+    <p>立てるハードウェアはIntel NUC(BOXNUC7CJYH)</p>
+    <p>CPU: Celeron J4005</p>
+    <p>メモリやSSDも積んで4万くらい</p>
+  </section>
+  <section>
+    <h3>選んだ理由</h3>
+    <ul>
+      <li>x86_64</li>
+      <li>省電力</li>
+      <li>たまたま友人に勧められた</li>
+      <li>うるさくないのでリビングに置ける</li>
+    </ul>
+  </section>
+  <section>
+    <h3>とりあえず</h3>
+    <p>Debian stretchを突っ込んで、</p>
+    <p>公式のDockerイメージを使うことを画策</p>
+  </section>
+  <section>
+    <h3>デモはめっちゃ簡単に動く</h3>
+    <p>https://github.com/nextcloud/docker</p>
+  </section>
+  <section>
+    <h2>Dockerfileの改造方法</h2>
+  </section>
+  <section>
+    <h1>わからない</h1>
+  </section>
+  <section>
+    <h3>ハマりポイント</h3>
+    <ul>
+      <li>Apache + SQLiteの奴はdocker runするだけで簡単に動く</li>
+      <li>外から接続することを考えると、証明書をフロントエンドに置いて
+	TLS接続を可能にする必要がある</li>
+    </ul>
+  </section>
+
+  <section>
+    <ul>
+      <li>php-fpm……、nginx……うーんわからん</li>
+      <li>公式のイメージが2系統あって使い分けとかますますわからん</li>
+      <li>php-fpmを素朴に立てると、繋がるはずのポートからページが見えない</li>
+      <li>Dockerfileから自ビルドするとコケる</li>
+    </ul>
+  </section>
+</section>
+
+<!-- P5 -->
+<section id="Yak Shaving">
+  <section>
+    <h2>Yak Shaving</h2>
+    <p>ところでごちゃごちゃいじっている間に</p>
+    <p>自室とリビングのインターネットの速度が違うことに気がつく</p>
+  </section>
+  <section>
+    <h3>自室に繋がるまでの何かにボトルネックがある。</h3>
+  </section>
+  <section>
+    <p>結論から書くと、8年前に引っ越した時につけた</p>
+    <p>PLC(電力線通信)アダプタがボトルネックになっていた。</p>
+  </section>
+  <section>
+    <h3>8年前のPLC(Panasonic製)</h3>
+    <p>当時はまだWiFi機器もWiiとニンテンドーDSぐらいしか無く</p>
+    <p>とりあえず自室にネットをつなげる分には悪くなかった</p>
+    <div style="text-align:center;">
+      <img src="imgs/03.jpg" style="width:20%;height:20%"/>
+    </di>
+  </section>
+  <section>
+    <p>自室でspeedtestを計測すると8Mbps</p>
+    <p>リビングでルーターに直結させて計測すると40Mbps</p>
+  </section>
+  <section>
+    <h2>このPLC 遅すぎィ！</h2>
+  </section>
+  <section>
+    <p>仕方がないので通販で</p>
+    <p>モールと15mのLANケーブルを買ってきて、敷設する</p>
+    <div style="text-align:center;">
+      <img src="imgs/01.jpg" style="width:40%;height:40%"/>
+      <img src="imgs/02.jpg" style="width:40%;height:40%"/>
+    </div>
+  </section>
+  <section>
+    <h2>やった！ いろいろ見直した結果 最高80Mbpsまで上がったぞ！</h2>
+  </section>
+  <section>
+    <h2>こうして時間が過ぎてゆく…</h2>
+  </section>
+</section>
+<!-- P6 -->
+<section id="諦めた">
+  <section>
+    <h3>結果</h3>
+    <p>いろいろやっていると時間が足りない</p>
+    <p>Dockerで立てるのを諦めた</p>
+    <p>とりあえず運用してみるのが先だ</p>
+  </section>
+  <section>
+    <h3>KVM上に仮想マシンを1台立ててその中で運用</h3>
+    <p>libvirtdにうまく繋がなくてつまることもあったが、systemd用のパッケージが足りないのが原因だった</p>
+    <p>公式のInstallationドキュメントを読むと立つ</p>
+  </section>
+  <section>
+    <h2>ネットワーク関連</h2>
+    <p>タブレットなどで外のネットワークから安全に通信するにはTLSを有効にする必要がある</p>
+  </section>
+  <section>
+    <h3>TODO</h3>
+    <ul>
+      <li>IP直打ちじゃなくてドメインを取得する必要がある</li>
+      <li>家の回線は固定IPではないので、契約を変更するかDDNSを使う必要がある</li>
+    </ul>
+  </section>
+  <section>
+    <h3>TODO</h3>
+    <ul>
+      <li>DDNSのサービスはどこを使う？ 更新はルーターの機能を使う？それともcronでコマンドを定期的に叩く？</li>
+      <li>ドメインにDDNSをセットした後、certbotからTLS証明を取得する必要がある</li>
+      <li>LANから同じドメインで接続するためには、内向きにDNSを立てる必要がある(スマホ/タブレットは "/etc/hosts"をいじれない)</li>
+    </ul>
+  </section>
+  <section>
+    <p>ローカルではIP直打ち運用？</p>
+    <p>アプリで接続設定をアカウントで分ける必要がある</p>
+    <p>→ 嬉しさが減る</p>
+  </section>
+  <section>
+    <h3>やることが…</h3>
+    <h3>やることが多い…！！</h3>
+  </section>
+  <section>
+    <h2>certbotのセットまで終わったのが今週水曜日</h2>
+  </section>
+</section>
+<!-- P7 -->
+<section id="まとめ">
+  <section>
+    <h3>ここまでの適当な所感</h3>
+    <ul>
+      <li>VPSとかクラウドとか借りたほうがグローバルIPとかもあるし楽感はある</li>
+      <li>昨今はTLSのセットまでやらないと危険だし、ブラウザが警告出してくるのでつらい</li>
+      <li>クライアントも全部Linuxだとクイックハックでごまかしが効くが、スマホはできないのでつらい</li>
+      <li>それでも立てる価値はあると思うのでやる(勉強とか)</li>
+    </ul>
+  </section>
+  <section>
+    <h2>ちょっと使った感想</h2>
+    <p>とりあえず音楽フォルダを丸ごとあげようとしたら、Web UIが不親切で進捗度とか教えてくれないのでつらい</p>
+  </section>
+  <section>
+    <h3>あんまりいいCLIクライアントがない</h3>
+    <ul>
+      <li>nextcloudcmdというのはあったが、バックグラウンドで動作させる奴っぽい(アップロードだけとかできない)</li>
+      <li>ソースを覗いたら、GUIクライアント(Qt)のコードと密結合していた</li>
+    </ul>
+  </section>
+  <section>
+    <h2>今後の予定</h2>
+    <ul>
+      <li>外のVPSにPrometheusを立てて、死活監視する(現在進行中)</li>
+      <li>ポートとかきっちり絞る</li>
+      <li>SELinuxとかAppArmorとか</li>
+      <li>セットアップにやった設定を見直す(実はApacheとか全然いじったことない)</li>
+      <li>Kali Linuxとかでセキュリティに穴が無いかチェックする</li>
+      <li>Mattermostとかも立ててみたい</li>
+    </ul>
+  </section>
+  <section>
+    <h3>おわり</h3>
+    <div style="text-align:center;">
+      <img src="imgs/05.png">
+    </div>
+  </section>
+</section>
+
+<!-- end -->
 			</div>
 		</div>
 
@@ -47,3 +302,4 @@
 		</script>
 	</body>
 </html>
+i
